@@ -3,7 +3,10 @@
   <groupId>lis</groupId>
   <artifactId>lis</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  
+  <properties>
+   <maven.compiler.source>1.8</maven.compiler.source>
+   <maven.compiler.target>1.8</maven.compiler.target>
+</properties>
 	<dependencies>
 		<dependency>
 		    <groupId>org.apache.opennlp</groupId>
@@ -11,4 +14,40 @@
 		    <version>1.8.3</version>
 		</dependency>
 	</dependencies>
+	
+	<build>
+		<resources>
+	        <resource>
+	            <filtering>true</filtering>
+	            <directory>src/main/resources</directory>
+	        </resource>
+	    </resources>
+	    
+		<plugins>
+			<plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-shade-plugin</artifactId>
+	        <version>1.6</version>
+	        <executions>
+	          <execution>
+	            <phase>package</phase>
+	            <goals>
+	              <goal>shade</goal>
+	            </goals>
+	          </execution>
+	        </executions>
+	      </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>VoterServer</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
