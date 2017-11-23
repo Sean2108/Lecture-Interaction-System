@@ -19,7 +19,7 @@ public class VoterClient {
 		try {
 			VoterService e = (VoterService) Naming.lookup(VoterService.SERVICENAME);
 			poll = e.getPoll();
-			for (int i = 0; i <5; i++) {
+			for (int i = 0; i < poll.length; i++) {
 				System.out.println(poll[i]);
 			}
 			System.out.println("Enter answer:  ");
@@ -36,7 +36,7 @@ public class VoterClient {
 			        System.err.println(ioe.getMessage());
 		    }
 		
-            e.vote(id, ans);			
+            System.out.println(e.vote(id, ans));			
 		}catch(Exception e) {
 			System.err.println("Remote Exception: " + e.getMessage());
 			e.printStackTrace();
