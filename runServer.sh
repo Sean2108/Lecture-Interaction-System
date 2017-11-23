@@ -20,4 +20,5 @@
 set -o nounset                              # Treat unset variables as an error
 
 rmiregistry &
-java -Djava.security.policy=policy.txt -cp target/classes VoterServer
+java -jar -Djava.security.policy=policy.txt target/lis-0.0.1-SNAPSHOT.jar
+#java -Djava.security.policy=policy.txt -cp target/classes:src/main/resources VoterServer
