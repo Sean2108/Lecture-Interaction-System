@@ -1,10 +1,10 @@
 import java.io.*;
 import java.rmi.*;
-import java.rmi.server.*;
 import java.util.*;
 
 /** This is the main class of the server */
 public class VoterServer {
+	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
 		System.setSecurityManager(new RMISecurityManager());
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -34,47 +34,10 @@ public class VoterServer {
 				vi = new OpenEndedVoterServiceImpl(poll);
 			}
 			Naming.rebind(VoterService.SERVICENAME, vi);
-			System.out.println("Published in RMI registry, ready...");
+			System.out.println("Waiting for answers...");
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
 	}
 			
 }
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	
-
-
-		
