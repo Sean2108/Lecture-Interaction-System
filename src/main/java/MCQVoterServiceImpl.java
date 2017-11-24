@@ -5,8 +5,8 @@ import java.util.*;
 /** This is the main class of the server */
 public class MCQVoterServiceImpl extends UnicastRemoteObject implements VoterService {
 	public final static String SERVICENAME="VoteService";
-	HashMap<String, Integer> numberOfVotes = new HashMap<String, Integer>();
-	ArrayList<String> voteOnce = new ArrayList<String>();
+	Map<String, Integer> numberOfVotes = new HashMap<String, Integer>();
+	List<String> voteOnce = new ArrayList<String>();
 	List<String> poll;
 	
 	
@@ -27,7 +27,6 @@ public class MCQVoterServiceImpl extends UnicastRemoteObject implements VoterSer
 			numberOfVotes.put(vote, numberOfVotes.getOrDefault(vote, 0) + 1);
 			voteOnce.add(studentId);
 		}
-		printVoteCount();
 		return "You voted for " + vote;
 //		for (String id : voteOnce) {
 //			if (id.equals(studentId)) {
@@ -52,6 +51,14 @@ public class MCQVoterServiceImpl extends UnicastRemoteObject implements VoterSer
 			System.out.println(key + " -> " + numberOfVotes.get(key) + " votes");
 		}
 		System.out.println();
+	}
+	
+	public Map<String, Integer> getVoteCount() {
+		return numberOfVotes;
+	}
+	
+	public Map<String, Integer> getMissCount() {
+		return null;
 	}
 }
 		

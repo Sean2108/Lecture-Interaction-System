@@ -58,7 +58,8 @@ public class OpenEndedVoterServiceImpl extends UnicastRemoteObject implements Vo
 	
 	public synchronized String vote(String studentId, String vote) throws java.rmi.RemoteException {
 		if (voteOnce.contains(studentId)) return "You already voted!";
-		return "You are " + (parse(vote) * 100 / (double) keywords.size()) + "% right!";
+		if (!keywords.isEmpty()) return "You are " + (parse(vote) * 100 / (double) keywords.size()) + "% right!";
+		else return "No valid keywords available";
 	}
 			
 	
@@ -76,25 +77,30 @@ public class OpenEndedVoterServiceImpl extends UnicastRemoteObject implements Vo
 			String[] lemmas = lemmatizer.lemmatize(tokens, tags);
 			for (int i = 0; i < lemmas.length; i++) {
 				if (seen.contains(tokens[i]) || seen.contains(lemmas[i])) continue;
-				if (lemmas[i].equals("O") && keywords.contains(tokens[i])) {
-					count++;
-					seen.add(tokens[i]);
-					hitCount.put(tokens[i], hitCount.getOrDefault(tokens[i], 0) + 1);
-				}
-				else if (!lemmas[i].equals("O")) {		
-					if (keywords.contains(lemmas[i])) {
-						count++;
-						seen.add(lemmas[i]);
-						hitCount.put(lemmas[i], hitCount.getOrDefault(lemmas[i], 0) + 1);
-					}
-					else {
-//						TO DO: filter adverbs, pronouns, etc?
-						missCount.put(lemmas[i], missCount.getOrDefault(lemmas[i], 0) + 1);
-					}
-				}
+				if (isKeyword(seen, tokens[i], tags[i], lemmas[i])) count++;
 			}
 		}
 		return count;
+	}
+	
+	private boolean isKeyword(Set<String> seen, String token, String tag, String lemma) {
+		if (lemma.equals("O") && keywords.contains(token)) {
+			seen.add(token);
+			hitCount.put(token, hitCount.getOrDefault(token, 0) + 1);
+			return true;
+		}
+		if (!lemma.equals("O")) {		
+			if (keywords.contains(lemma)) {
+				seen.add(lemma);
+				hitCount.put(lemma, hitCount.getOrDefault(lemma, 0) + 1);
+				return true;
+			}
+			else if (tag.startsWith("N") || tag.startsWith("J") || tag.startsWith("V")) {
+//				TO DO: filter adverbs, pronouns, etc?
+				missCount.put(lemma, missCount.getOrDefault(lemma, 0) + 1);
+			}
+		}
+		return false;
 	}
 	
 	private Set<String> parseKeywords(List<String> keywords) {
@@ -107,6 +113,14 @@ public class OpenEndedVoterServiceImpl extends UnicastRemoteObject implements Vo
 			else keywordSet.add(lemmas[i]);
 		}
 		return keywordSet;
+	}
+	
+	public Map<String, Integer> getVoteCount() {
+		return hitCount;
+	}
+	
+	public Map<String, Integer> getMissCount() {
+		return missCount;
 	}
 }
 		
