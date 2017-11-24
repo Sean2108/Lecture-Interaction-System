@@ -12,7 +12,11 @@ import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
 
-/** This is the main class of the server */
+/**
+ * implementation to handle open ended questions
+ * @author sean
+ *
+ */
 public class OpenEndedVoterServiceImpl extends UnicastRemoteObject implements VoterService {
 	public final static String SERVICENAME="VoteService";
 	Map<String, Integer> hitCount = new HashMap<String, Integer>();
@@ -25,11 +29,20 @@ public class OpenEndedVoterServiceImpl extends UnicastRemoteObject implements Vo
 	POSTaggerME tagger = null;
 	DictionaryLemmatizer lemmatizer = null;
 	
+	/**
+	 * empty constructor, initializes models and feeds them training data
+	 * @throws RemoteException
+	 */
 	public OpenEndedVoterServiceImpl() throws RemoteException {
 		super();	// sets up networking
 		initModels();
 	}
 	
+	/**
+	 * initializes models, separates question from keywords and calls parse on the keywords
+	 * @param keywords index 0 is the question, the rest are the keywords that the professor is looking for
+	 * @throws RemoteException thrown when the remote objects cannot be found
+	 */
 	public OpenEndedVoterServiceImpl(List<String> keywords) throws RemoteException {
 		super();	// sets up networking
 		this.question = keywords.get(0);
@@ -38,6 +51,9 @@ public class OpenEndedVoterServiceImpl extends UnicastRemoteObject implements Vo
 		this.keywords = parseKeywords(keywords);
 	}
 	
+	/**
+	 * initializes models and trains them with pre-created data
+	 */
 	private void initModels() {
 		try {
 			InputStream modelIn = new FileInputStream("src/main/resources/en-sent.bin");
@@ -56,17 +72,30 @@ public class OpenEndedVoterServiceImpl extends UnicastRemoteObject implements Vo
 		}
 	}
 	
+	/**
+	 * checks if student has already answered. If not, calculate the correctness of his answer.
+	 */
 	public synchronized String vote(String studentId, String vote) throws java.rmi.RemoteException {
 		if (voteOnce.contains(studentId)) return "You already voted!";
 		if (!keywords.isEmpty()) return "You are " + (parse(vote) * 100 / (double) keywords.size()) + "% right!";
 		else return "No valid keywords available";
 	}
 			
-	
+	/**
+	 * returns an array with the question in it.
+	 */
 	public String[] getPoll() throws java.rmi.RemoteException {
 		return new String[]{question};
 	}
 	
+	/**
+	 * parse student's answer, counts number of hits and adds hits and misses to the aggregated maps.\
+	 * firstly splits answer into sentences, tokenizes student's answer, 
+	 * then tags each answer to a type of word (eg verb, noun, adjective etc)
+	 * and then lemmatizes it to its root word (eg drives / driven / drove -> drive)
+	 * @param ans student's answer
+	 * @return number of correct keywords that the student has in his answer.
+	 */
 	private int parse(String ans) {
 		String sentences[] = sentenceDetector.sentDetect(ans);
 		int count = 0;
@@ -83,6 +112,15 @@ public class OpenEndedVoterServiceImpl extends UnicastRemoteObject implements Vo
 		return count;
 	}
 	
+	/**
+	 * checks if a word in the student's answer is present in the set of keywords provided by professor.
+	 * called once for each word in the student's answer.
+	 * @param seen whether the word is repeated. if it is repeated, skip it.
+	 * @param token the raw word that the student provides.
+	 * @param tag type of word.
+	 * @param lemma the root word of the token.
+	 * @return true if it is in the professor's keywords, else false.
+	 */
 	private boolean isKeyword(Set<String> seen, String token, String tag, String lemma) {
 		if (lemma.equals("O") && keywords.contains(token)) {
 			seen.add(token);
@@ -103,6 +141,11 @@ public class OpenEndedVoterServiceImpl extends UnicastRemoteObject implements Vo
 		return false;
 	}
 	
+	/**
+	 * parses the professor's keywords into their lemmas to make comparison easier.
+	 * @param keywords list of keywords provided by professor.
+	 * @return set of lemmas of the professor's keywords.
+	 */
 	private Set<String> parseKeywords(List<String> keywords) {
 		String tokens[] = keywords.toArray(new String[keywords.size()]);
 		String tags[] = tagger.tag(tokens);
@@ -115,10 +158,16 @@ public class OpenEndedVoterServiceImpl extends UnicastRemoteObject implements Vo
 		return keywordSet;
 	}
 	
+	/**
+	 * getter method to allow voter service to view map of correct keywords.
+	 */
 	public Map<String, Integer> getVoteCount() {
 		return hitCount;
 	}
 	
+	/**
+	 * getter method to allow voter service to view map of wrong words.
+	 */
 	public Map<String, Integer> getMissCount() {
 		return missCount;
 	}
