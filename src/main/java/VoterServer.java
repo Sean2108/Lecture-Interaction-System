@@ -10,12 +10,12 @@ public class VoterServer {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		try {
 			System.out.println("Enter 1 for MCQ, 2 for Open ended question.");
-			String input = br.readLine();
+			boolean isMCQ = br.readLine().equals("1") ? true : false;
 			VoterService vi = null;
 			List<String> poll = new ArrayList<>();
 			System.out.println("What is the question?");
 			poll.add(br.readLine());
-			if (input.equals("1")) {
+			if (isMCQ) {
 				System.out.println("What are the options? (Input \"e\" to end)");
 				while (true) {
 					String option = br.readLine();
@@ -34,10 +34,32 @@ public class VoterServer {
 				vi = new OpenEndedVoterServiceImpl(poll);
 			}
 			Naming.rebind(VoterService.SERVICENAME, vi);
+			System.out.print("Set timer in seconds: ");
+			int timeout = Integer.parseInt(br.readLine());
 			System.out.println("Waiting for answers...");
+			Thread.sleep(timeout * 1000);
+			Map<String, Integer> voteCount = vi.getVoteCount();
+			if (isMCQ) {
+				System.out.println("Votes for multiple choice question: ");
+				displayVotes(voteCount);
+			}
+			else {
+				System.out.println("Correct keywords: ");
+				displayVotes(voteCount);
+				System.out.println("Wrong keywords: ");
+				displayVotes(vi.getMissCount());
+			}
+			System.exit(0);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
 	}
-			
+	
+	
+	private static void displayVotes(Map<String, Integer> votes) {
+		for (String key : votes.keySet()) {
+			System.out.println(key + " -> " + votes.get(key) + " votes");
+		}
+		System.out.println();
+	}
 }
