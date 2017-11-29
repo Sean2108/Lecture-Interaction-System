@@ -1,6 +1,5 @@
-/home/Sean/coding/distributed_systems/project/test/src/main/java/VoterServer.java
-/home/Sean/coding/distributed_systems/project/test/src/main/java/MCQVoterServiceImpl.java
-/home/Sean/coding/distributed_systems/project/test/src/main/java/Controller.java
-/home/Sean/coding/distributed_systems/project/test/src/main/java/VoterClient.java
-/home/Sean/coding/distributed_systems/project/test/src/main/java/OpenEndedVoterServiceImpl.java
-/home/Sean/coding/distributed_systems/project/test/src/main/java/VoterService.java
+/home/Sean/coding/distributed_systems/project/Lecture-Interaction-System/src/main/java/OpenEndedVoterServiceImpl.java
+/home/Sean/coding/distributed_systems/project/Lecture-Interaction-System/src/main/java/VoterServer.java
+/home/Sean/coding/distributed_systems/project/Lecture-Interaction-System/src/main/java/VoterClient.java
+/home/Sean/coding/distributed_systems/project/Lecture-Interaction-System/src/main/java/VoterService.java
+/home/Sean/coding/distributed_systems/project/Lecture-Interaction-System/src/main/java/MCQVoterServiceImpl.java

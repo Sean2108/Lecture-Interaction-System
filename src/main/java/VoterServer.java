@@ -3,6 +3,9 @@ import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.*;
+import static spark.Spark.*;
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
 
 import org.apache.log4j.BasicConfigurator;
 
@@ -16,6 +19,9 @@ public class VoterServer {
 		if (System.getSecurityManager() == null) System.setSecurityManager(new RMISecurityManager());
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         //BasicConfigurator.configure();
+        Logger.getRootLogger().setLevel(Level.WARN);
+        staticFiles.location("/UIResources");
+        init();
 		try {
 			System.out.println("Enter 1 for MCQ, 2 for Open ended question.");
 			boolean isMCQ = br.readLine().equals("1") ? true : false;
@@ -80,18 +86,13 @@ public class VoterServer {
 	private static VoterService getOptionsAndKeywords(List<String> poll, boolean isMCQ, BufferedReader br) {
 		if (isMCQ) System.out.println("What are the options? (Input \"e\" to end)");
 		else System.out.println("What are the keywords? (Input \"e\" to end)");
-        Controller controller = new Controller();
 		try {
 			while (true) {
 				String option = br.readLine();
 				if (option.equals("e")) break;
 				poll.add(option);
 			}
-			if (isMCQ) {
-                controller.getMCQ();
-                System.out.println("Visit localhost:4567");
-                return new MCQVoterServiceImpl(poll);
-            }
+			if (isMCQ) return new MCQVoterServiceImpl(poll);
 			return new OpenEndedVoterServiceImpl(poll);
 		} catch (Exception e) {
 			e.printStackTrace();
