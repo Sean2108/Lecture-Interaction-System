@@ -19,15 +19,15 @@ import opennlp.tools.tokenize.TokenizerModel;
  */
 public class OpenEndedVoterServiceImpl extends UnicastRemoteObject implements VoterService {
 	public final static String SERVICENAME="VoteService";
-	private Map<String, Integer> hitCount = new HashMap<String, Integer>();
-	private Map<String, Integer> missCount = new HashMap<String, Integer>();
-	private ArrayList<String> voteOnce = new ArrayList<String>();
-	private Set<String> keywords = new HashSet<>();
-	private String question;
-	private SentenceDetectorME sentenceDetector = null;
-	private Tokenizer tokenizer = null;
-	private POSTaggerME tagger = null;
-	private DictionaryLemmatizer lemmatizer = null;
+	Map<String, Integer> hitCount = new HashMap<String, Integer>();
+	Map<String, Integer> missCount = new HashMap<String, Integer>();
+	ArrayList<String> voteOnce = new ArrayList<String>();
+	Set<String> keywords = new HashSet<>();
+	String question;
+	SentenceDetectorME sentenceDetector = null;
+	Tokenizer tokenizer = null;
+	POSTaggerME tagger = null;
+	DictionaryLemmatizer lemmatizer = null;
 	
 	/**
 	 * empty constructor, initializes models and feeds them training data
@@ -44,9 +44,10 @@ public class OpenEndedVoterServiceImpl extends UnicastRemoteObject implements Vo
 	 * @throws RemoteException thrown when the remote objects cannot be found
 	 */
 	public OpenEndedVoterServiceImpl(List<String> keywords) throws RemoteException {
-		this();
+		super();	// sets up networking
 		this.question = keywords.get(0);
 		keywords.remove(0);
+		initModels();
 		this.keywords = parseKeywords(keywords);
 	}
 	
@@ -75,8 +76,8 @@ public class OpenEndedVoterServiceImpl extends UnicastRemoteObject implements Vo
 	 * checks if student has already answered. If not, calculate the correctness of his answer.
 	 */
 	public synchronized String vote(String studentId, String vote) throws java.rmi.RemoteException {
-		if (voteOnce.contains(studentId)) return "You already answered!";
-		if (!keywords.isEmpty()) return "You are " + Math.round(parse(vote) * 100 / (double) keywords.size()) + "% right!";
+		if (voteOnce.contains(studentId)) return "You already voted!";
+		if (!keywords.isEmpty()) return "You are " + (parse(vote) * 100 / (double) keywords.size()) + "% right!";
 		else return "No valid keywords available";
 	}
 			
