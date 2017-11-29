@@ -10,10 +10,6 @@ import java.rmi.Naming;
 //
 //  TO DO:  Need to display the poll result back to the client eventually in the form of a nice graph
 
-/**
- * client program for students to view the question and respond.
- * @author robert
- */
 public class VoterClient {
 	public static void main(String[] args) {
 		String[] poll;
@@ -35,11 +31,11 @@ public class VoterClient {
 		    }
 			System.out.println("Enter Student ID");
 			try {
-				id = br.readLine();
-		    } catch(IOException ioe) {
-		    	System.err.println(ioe.getMessage());
+			   id = br.readLine();
+		       } catch(IOException ioe) {
+			        System.err.println(ioe.getMessage());
 		    }
-			
+		
             System.out.println(e.vote(id, ans));			
 		}catch(Exception e) {
 			System.err.println("Remote Exception: " + e.getMessage());
