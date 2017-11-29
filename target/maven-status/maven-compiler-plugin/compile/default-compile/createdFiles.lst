@@ -1,5 +1,1 @@
-VoterClient.class
-VoterServer.class
-OpenEndedVoterServiceImpl.class
-VoterService.class
-MCQVoterServiceImpl.class
+Controller.class
