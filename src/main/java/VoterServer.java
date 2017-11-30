@@ -37,21 +37,17 @@ public class VoterServer {
             res.redirect("/" + choice);
             return null;
         });
+		setChartRoutes("mcq", null);
 	}
 	
 	/**
 	 * displays page to set up multiple choice questions. initializes VoterService instance to MCQVoterServiceImpl
-	 * after user inputs his question and options.
+	 * after user inputs his question and options. Also calls setChartRoute to allow chart to be displayed.
 	 */
     private static void setMCQRoutes() {
     	get("/mcq", (request, response) -> {
             response.type("text/html");
             return new String(Files.readAllBytes(Paths.get("src/main/resources/ServerUI/QuestionSetupMC.html")));
-        });
-    	
-    	get("/mcq?", (request, response) -> {
-            response.redirect("/mcq");
-            return null;
         });
     	
     	post("/mcq", (req, res) -> {
@@ -63,11 +59,15 @@ public class VoterServer {
                 for (int i = 0; i < a.length; i++) {
                 	poll.add(a[i]);
                 }
-                Naming.rebind(VoterService.SERVICENAME, new MCQVoterServiceImpl(poll));
+                VoterService vi = new MCQVoterServiceImpl(poll);
+                Naming.rebind(VoterService.SERVICENAME, vi);
+        		setChartRoutes("mcq", vi);
             } catch(Exception e) {
                 e.printStackTrace();
             }
-            return new String(Files.readAllBytes(Paths.get("src/main/resources/ServerUI/ProfConfirmation.html")));
+            setConfirmRoutes();
+            res.redirect("/confirm");
+            return null;
         });
     }
     
@@ -81,11 +81,6 @@ public class VoterServer {
             return new String(Files.readAllBytes(Paths.get("src/main/resources/ServerUI/QuestionSetupSA.html")));
         });
     	
-    	get("/open?", (request, response) -> {
-            response.redirect("/open");
-            return null;
-        });
-    	
     	post("/open", (req, res) -> {
             String question = "";
             List<String> poll = new ArrayList<>();
@@ -96,11 +91,52 @@ public class VoterServer {
                 for (String key : keywords) {
                 	poll.add(key);
                 }
-                Naming.rebind(VoterService.SERVICENAME, new OpenEndedVoterServiceImpl(poll));
+                VoterService vi = new OpenEndedVoterServiceImpl(poll);
+                Naming.rebind(VoterService.SERVICENAME, vi);
+        		setChartRoutes("open", vi);
             } catch(Exception e) {
                 e.printStackTrace();
             }
+            setConfirmRoutes();
+            res.redirect("/confirm");
+            return null;
+        });
+    }
+    
+    private static void setConfirmRoutes() {
+    	get("/confirm", (request, response) -> {
+            response.type("text/html");
             return new String(Files.readAllBytes(Paths.get("src/main/resources/ServerUI/ProfConfirmation.html")));
+        });
+    	
+    	post("/confirm", (request, response) -> {
+            response.type("text/html");
+            response.redirect("/chart");
+            return null;
+        });
+    }
+    
+    /**
+     * pass parameters to chart to display statistics
+     * @param vi VoterService that contains maps containing key value pairs of vote to counts
+     */
+    private static void setChartRoutes(String type, VoterService vi) {
+    	get("/chart", (request, response) -> {
+            response.type("text/html");
+//            Map<String, Integer> voteCount = vi.getVoteCount();
+//            StringBuilder redirectUrl = new StringBuilder("/chart/values?");
+//            for (String vote : voteCount.keySet()) {
+//            	redirectUrl.append(vote + "=" + voteCount.get(vote) + "&");
+//            }
+//            redirectUrl.setLength(redirectUrl.length() - 1);
+//            response.redirect(redirectUrl.toString());
+            response.redirect("/chart/values?a=5&b=2&c=4&d=7");
+            return null;
+        });
+    	
+    	get("/chart/values", (request, response) -> {
+            response.type("text/html");
+            return new String(Files.readAllBytes(Paths.get("src/main/resources/ServerUI/" + type + "Chart.html")));
         });
     }
 }
