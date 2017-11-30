@@ -25,6 +25,7 @@ public class VoterClient {
 		String[] poll;
 		Logger.getRootLogger().setLevel(Level.WARN);
         staticFiles.location("/UIResources");
+        port(4568);
 		try {
 			VoterService e = (VoterService) Naming.lookup(VoterService.SERVICENAME);
 			poll = e.getPoll();
