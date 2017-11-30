@@ -37,7 +37,7 @@ public class VoterServer {
             res.redirect("/" + choice);
             return null;
         });
-		setChartRoutes("mcq", null);
+//		setChartRoutes("mcq", null);
 	}
 	
 	/**

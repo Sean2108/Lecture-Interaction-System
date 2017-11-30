@@ -10,10 +10,10 @@
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: urlParams.keys(),
+            labels: Array.from(urlParams.keys()),
             datasets: [{
                 label: '# of Votes',
-                data: urlParams.values(),
+                data: Array.from(urlParams.values()),
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
