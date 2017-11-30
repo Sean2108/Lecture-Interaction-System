@@ -118,19 +118,37 @@ public class VoterServer {
     
     /**
      * pass parameters to chart to display statistics
+     * mcq has 1 map while open ended has 2 maps.
+     * for open ended's wrong map, use a priority queue to get the top 10 counts
      * @param vi VoterService that contains maps containing key value pairs of vote to counts
      */
     private static void setChartRoutes(String type, VoterService vi) {
     	get("/chart", (request, response) -> {
             response.type("text/html");
-//            Map<String, Integer> voteCount = vi.getVoteCount();
-//            StringBuilder redirectUrl = new StringBuilder("/chart/values?");
-//            for (String vote : voteCount.keySet()) {
-//            	redirectUrl.append(vote + "=" + voteCount.get(vote) + "&");
-//            }
-//            redirectUrl.setLength(redirectUrl.length() - 1);
-//            response.redirect(redirectUrl.toString());
-            response.redirect("/chart/values?a=5&b=2&c=4&d=7");
+            Map<String, Integer> voteCount = vi.getVoteCount();
+            StringBuilder redirectUrl = new StringBuilder("/chart/values?");
+            if (type.equals("mcq")) {
+                for (String vote : voteCount.keySet()) {
+                	redirectUrl.append(vote + "=" + voteCount.get(vote) + "&");
+                }
+            }
+            else {
+                for (String vote : voteCount.keySet()) {
+                	redirectUrl.append("key_" + vote + "=" + voteCount.get(vote) + "&");
+                }
+                PriorityQueue<Map.Entry<String, Integer>> topEntries 
+                = new PriorityQueue<>((x, y) -> y.getValue() - x.getValue());
+                for (Map.Entry<String, Integer> voteEntry : vi.getMissCount().entrySet()) {
+                	topEntries.add(voteEntry);
+                }
+                for (int i = 0; i < 10; i++) {
+                	Map.Entry<String, Integer> highest = topEntries.poll();
+                    redirectUrl.append("wrong_" + highest.getKey() + "=" + highest.getValue() + "&");
+                }
+            }
+            redirectUrl.setLength(redirectUrl.length() - 1);
+            response.redirect(redirectUrl.toString());
+//            response.redirect("/chart/values?a=5&b=2&c=4&d=7");
             return null;
         });
     	
