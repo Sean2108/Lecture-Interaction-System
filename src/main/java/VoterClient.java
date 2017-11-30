@@ -62,7 +62,7 @@ public class VoterClient {
 	private static void setRoutes(String[] poll) {
     	get("/mcqAns", (request, response) -> {
             response.type("text/html");
-            String html = new String(Files.readAllBytes(Paths.get("src/main/resources/UIResources/AnswerQuestionMC.html")));
+            String html = new String(Files.readAllBytes(Paths.get("src/main/resources/ClientUI/AnswerQuestionMC.html")));
             Document doc = Jsoup.parse(html);
             doc.selectFirst("p#q").text(poll[0]);
             doc.selectFirst("p#a").text(poll[1]);
@@ -74,7 +74,7 @@ public class VoterClient {
     	
     	get("/openAns", (request, response) -> {
             response.type("text/html");
-            String html = new String(Files.readAllBytes(Paths.get("src/main/resources/UIResources/AnswerQuestionSA.html")));
+            String html = new String(Files.readAllBytes(Paths.get("src/main/resources/ClientUI/AnswerQuestionSA.html")));
             Document doc = Jsoup.parse(html);
             doc.selectFirst("p#q").text(poll[0]);
             return doc.toString();

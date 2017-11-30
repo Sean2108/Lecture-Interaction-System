@@ -100,7 +100,7 @@ public class VoterServer {
     private static void setRoutes() {
     	get("/mcq", (request, response) -> {
             response.type("text/html");
-            return new String(Files.readAllBytes(Paths.get("src/main/resources/UIResources/QuestionSetupMC.html")));
+            return new String(Files.readAllBytes(Paths.get("src/main/resources/ServerUI/QuestionSetupMC.html")));
         });
     	
     	get("/mcq?", (request, response) -> {
@@ -121,12 +121,12 @@ public class VoterServer {
             } catch(Exception e) {
                 e.printStackTrace();
             }
-            return new String(Files.readAllBytes(Paths.get("src/main/resources/UIResources/ProfConfirmation.html")));
+            return new String(Files.readAllBytes(Paths.get("src/main/resources/ServerUI/ProfConfirmation.html")));
         });
     	
     	get("/open", (request, response) -> {
             response.type("text/html");
-            return new String(Files.readAllBytes(Paths.get("src/main/resources/UIResources/QuestionSetupSA.html")));
+            return new String(Files.readAllBytes(Paths.get("src/main/resources/ServerUI/QuestionSetupSA.html")));
         });
     	
     	get("/open?", (request, response) -> {
@@ -148,7 +148,7 @@ public class VoterServer {
             } catch(Exception e) {
                 e.printStackTrace();
             }
-            return new String(Files.readAllBytes(Paths.get("src/main/resources/UIResources/ProfConfirmation.html")));
+            return new String(Files.readAllBytes(Paths.get("src/main/resources/ServerUI/ProfConfirmation.html")));
         });
     }
 }
