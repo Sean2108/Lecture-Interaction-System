@@ -105,19 +105,44 @@ public class VoterServer {
     	
     	post("/mcq", (req, res) -> {
             StringBuilder message = new StringBuilder();
-
+            List<String> poll = new ArrayList<>();
             try {
                 String question = req.queryParams("question");
                 String[] a = req.queryParamsValues("a");
-                message.append(question + "<br>");
+                message.append(question + "<br><br>");
+                poll.add(question);
                 for (int i = 0; i < a.length; i++) {
                 	message.append((char)('a' + i) + ". " + a[i]);
                 	message.append("<br>");
+                	poll.add(a[i]);
                 }
+                Naming.rebind(VoterService.SERVICENAME, new MCQVoterServiceImpl(poll));
             } catch(Exception e) {
                 e.printStackTrace();
             }
             return message.toString();
+        });
+    	
+    	get("/open", (request, response) -> {
+            response.type("text/html");
+            return new String(Files.readAllBytes(Paths.get("src/main/resources/UIResources/QuestionSetupSA.html")));
+        });
+    	
+    	post("/open", (req, res) -> {
+            String question = "";
+            List<String> poll = new ArrayList<>();
+            try {
+                question = req.queryParams("question");
+                String[] keywords = req.queryParams("keywords").split(" ");
+                poll.add(question);
+                for (String key : keywords) {
+                	poll.add(key);
+                }
+                Naming.rebind(VoterService.SERVICENAME, new OpenEndedVoterServiceImpl(poll));
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+            return question;
         });
     }
 }
