@@ -18,6 +18,10 @@ import opennlp.tools.tokenize.TokenizerModel;
  *
  */
 public class OpenEndedVoterServiceImpl extends UnicastRemoteObject implements VoterService {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8524186864175925764L;
 	public final static String SERVICENAME="VoteService";
 	private Map<String, Integer> hitCount = new HashMap<String, Integer>();
 	private Map<String, Integer> missCount = new HashMap<String, Integer>();
@@ -169,6 +173,13 @@ public class OpenEndedVoterServiceImpl extends UnicastRemoteObject implements Vo
 	 */
 	public Map<String, Integer> getMissCount() {
 		return missCount;
+	}
+	
+	/**
+	 * method to identify the implementation. returns false as it is not MCQ
+	 */
+	public boolean isMCQ() {
+		return false;
 	}
 }
 		

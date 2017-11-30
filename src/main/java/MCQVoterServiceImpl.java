@@ -4,10 +4,13 @@ import java.util.*;
 
 /**
  * implementation to handle MCQ
- * @author robert
  *
  */
 public class MCQVoterServiceImpl extends UnicastRemoteObject implements VoterService {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8064717333958683642L;
 	public final static String SERVICENAME="VoteService";
 	Map<String, Integer> numberOfVotes = new HashMap<String, Integer>();
 	List<String> voteOnce = new ArrayList<String>();
@@ -63,6 +66,13 @@ public class MCQVoterServiceImpl extends UnicastRemoteObject implements VoterSer
 	 */
 	public Map<String, Integer> getMissCount() {
 		return null;
+	}
+	
+	/**
+	 * method to identify the implementation. returns true as it is MCQ
+	 */
+	public boolean isMCQ() {
+		return true;
 	}
 }
 		

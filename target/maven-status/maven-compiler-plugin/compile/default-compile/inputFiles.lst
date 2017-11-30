@@ -1,5 +1,7 @@
-C:\Users\100536625\Documents\SOFE4790_Distributed\PROJECT\LIS3\Lecture-Interaction-System\src\main\java\VoterService.java
-C:\Users\100536625\Documents\SOFE4790_Distributed\PROJECT\LIS3\Lecture-Interaction-System\src\main\java\OpenEndedVoterServiceImpl.java
-C:\Users\100536625\Documents\SOFE4790_Distributed\PROJECT\LIS3\Lecture-Interaction-System\src\main\java\VoterClient.java
-C:\Users\100536625\Documents\SOFE4790_Distributed\PROJECT\LIS3\Lecture-Interaction-System\src\main\java\MCQVoterServiceImpl.java
-C:\Users\100536625\Documents\SOFE4790_Distributed\PROJECT\LIS3\Lecture-Interaction-System\src\main\java\VoterServer.java
+/home/Sean/coding/distributed_systems/project/Lecture-Interaction-System/src/main/java/ClientRouter.java
+/home/Sean/coding/distributed_systems/project/Lecture-Interaction-System/src/main/java/OpenEndedVoterServiceImpl.java
+/home/Sean/coding/distributed_systems/project/Lecture-Interaction-System/src/main/java/VoterServer.java
+/home/Sean/coding/distributed_systems/project/Lecture-Interaction-System/src/main/java/ServerRouter.java
+/home/Sean/coding/distributed_systems/project/Lecture-Interaction-System/src/main/java/VoterClient.java
+/home/Sean/coding/distributed_systems/project/Lecture-Interaction-System/src/main/java/VoterService.java
+/home/Sean/coding/distributed_systems/project/Lecture-Interaction-System/src/main/java/MCQVoterServiceImpl.java

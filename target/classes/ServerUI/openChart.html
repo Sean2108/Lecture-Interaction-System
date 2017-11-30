@@ -21,7 +21,7 @@
             data: {
                 labels: Array.from(mapWords.keys()),
                 datasets: [{
-                    label: 'Keywords',
+                    label: id === 'myChart1' ? 'Keywords' : 'Common answers that are not in keywords',
                     data: Array.from(mapWords.values()),
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',

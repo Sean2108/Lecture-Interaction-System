@@ -6,4 +6,5 @@ public interface VoterService extends java.rmi.Remote {
 	public String[] getPoll() throws java.rmi.RemoteException;
 	public Map<String, Integer> getVoteCount() throws java.rmi.RemoteException;
 	public Map<String, Integer> getMissCount() throws java.rmi.RemoteException;
+	public boolean isMCQ() throws java.rmi.RemoteException;
 }
