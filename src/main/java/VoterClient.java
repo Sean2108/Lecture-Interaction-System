@@ -32,7 +32,7 @@ public class VoterClient {
 		try {
 			VoterService e = (VoterService) Naming.lookup(VoterService.SERVICENAME);
 			poll = e.getPoll();
-			setRoutes(poll);
+			setRoutes(poll, e);
 			for (int i = 0; i < poll.length; i++) {
 				System.out.println(poll[i]);
 			}
@@ -59,7 +59,7 @@ public class VoterClient {
 		
 	}
 	
-	private static void setRoutes(String[] poll) {
+	private static void setRoutes(String[] poll, VoterService vi) {
     	get("/mcqAns", (request, response) -> {
             response.type("text/html");
             String html = new String(Files.readAllBytes(Paths.get("src/main/resources/ClientUI/AnswerQuestionMC.html")));
@@ -72,6 +72,18 @@ public class VoterClient {
             return doc.toString();
         });
     	
+    	post("/mcqAns", (request, response) -> {
+            response.type("text/html");
+            try {
+                String id = request.queryParams("studentId");
+                String ans = request.queryParams("ans");
+                return vi.vote(id, ans);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        });
+    	
     	get("/openAns", (request, response) -> {
             response.type("text/html");
             String html = new String(Files.readAllBytes(Paths.get("src/main/resources/ClientUI/AnswerQuestionSA.html")));
@@ -80,5 +92,16 @@ public class VoterClient {
             return doc.toString();
         });
     	
+    	post("/openAns", (request, response) -> {
+            response.type("text/html");
+            try {
+                String id = request.queryParams("studentId");
+                String ans = request.queryParams("ans");
+                return vi.vote(id, ans);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        });
     }
 }
