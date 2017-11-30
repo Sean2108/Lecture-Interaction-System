@@ -1,5 +1,6 @@
-import java.io.*;
-import java.rmi.Naming;
+import static spark.Spark.*;
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
 // Voting on a poll question:
 // Right now the question is hard-coded in the Server
 // There are always four answers (a,b,c,d)
@@ -10,38 +11,21 @@ import java.rmi.Naming;
 //
 //  TO DO:  Need to display the poll result back to the client eventually in the form of a nice graph
 
+/**
+ * client program for students to view the question and respond.
+ */
 public class VoterClient {
 	public static void main(String[] args) {
-		String[] poll;
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String ans ="", id = "";
-		
+		Logger.getRootLogger().setLevel(Level.WARN);
+        staticFiles.location("/UIResources");
+        port(4568);
+        ClientRouter c = new ClientRouter();
 		try {
-			VoterService e = (VoterService) Naming.lookup(VoterService.SERVICENAME);
-			poll = e.getPoll();
-			for (int i = 0; i < poll.length; i++) {
-				System.out.println(poll[i]);
-			}
-			System.out.println("Enter answer:  ");
-			
-			try {
-			   ans = br.readLine();
-		       } catch(IOException ioe) {
-			        System.err.println(ioe.getMessage());
-		    }
-			System.out.println("Enter Student ID");
-			try {
-			   id = br.readLine();
-		       } catch(IOException ioe) {
-			        System.err.println(ioe.getMessage());
-		    }
-		
-            System.out.println(e.vote(id, ans));			
+			c.setFrontPage();
+			System.out.println("Visit localhost:4568 to answer questions.");
 		}catch(Exception e) {
 			System.err.println("Remote Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
-		
-		
 	}
 }
