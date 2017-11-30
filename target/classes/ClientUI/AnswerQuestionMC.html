@@ -5,17 +5,20 @@
 </header>
 <body>
 </form>
-<center><form action="" method="">
-<p>Choose your answer </p><br>
-<p id="q">Question</p> 
+<center><form action="/mcqAns" method="POST">
+<p>Choose your answer </p>
+<p id="q">Question</p>
+<p>Enter Student ID: </p>
+<input type="text" name="studentId" value="">
 <p id="a">Answer A</p>
- <input type="submit" value="A">
+ <input type="radio" name="ans" value="A">
 <p id="b">Answer B</p>
- <input type="submit" value="B">
+ <input type="radio" name="ans" value="B">
 <p id="c">Answer C</p>
- <input type="submit" value="C">
+ <input type="radio" name="ans" value="C">
 <p id="d">Answer D</p>
- <input type="submit" value="D">
+<input type="radio" name="ans" value="D"><br><br>
+<input type="submit" value="Submit"><br><br>
 <center><img src="UOIT.jpg" alt="UOIT Emblem">
 </body>
 </html>
