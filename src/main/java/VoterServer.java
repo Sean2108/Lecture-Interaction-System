@@ -136,8 +136,7 @@ public class VoterServer {
                 for (String vote : voteCount.keySet()) {
                 	redirectUrl.append("key_" + vote + "=" + voteCount.get(vote) + "&");
                 }
-                PriorityQueue<Map.Entry<String, Integer>> topEntries 
-                = new PriorityQueue<>((x, y) -> y.getValue() - x.getValue());
+                PriorityQueue<Map.Entry<String, Integer>> topEntries = new PriorityQueue<>((x, y) -> y.getValue() - x.getValue());
                 for (Map.Entry<String, Integer> voteEntry : vi.getMissCount().entrySet()) {
                 	topEntries.add(voteEntry);
                 }
@@ -147,6 +146,7 @@ public class VoterServer {
                 }
             }
             redirectUrl.setLength(redirectUrl.length() - 1);
+			System.out.println(redirectUrl.toString());
             response.redirect(redirectUrl.toString());
 //            response.redirect("/chart/values?a=5&b=2&c=4&d=7");
             return null;

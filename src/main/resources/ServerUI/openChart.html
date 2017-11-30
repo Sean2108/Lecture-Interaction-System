@@ -9,8 +9,8 @@
     function splitKeywords(keywords, wrongwords) {
         var urlParams = new URLSearchParams(window.location.search);
         for (var pair of urlParams.entries()) {
-            if (pair[0].startswith("key_")) keywords.set(pair[0], pair[1]);
-            else if (pair[0].startswith("wrong_")) wrongwords.set(pair[0], pair[1])
+            if (pair[0].startsWith("key_")) keywords.set(pair[0].substring(4), pair[1]);
+            else if (pair[0].startsWith("wrong_")) wrongwords.set(pair[0].substring(6), pair[1])
         }
     }
 

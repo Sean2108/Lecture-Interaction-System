@@ -84,7 +84,7 @@ public class VoterClient {
             response.type("text/html");
             try {
                 String id = request.queryParams("studentId");
-                String ans = request.queryParams("ans");
+                String ans = request.queryParams("sa");
                 return vi.vote(id, ans);
             } catch(Exception e) {
                 e.printStackTrace();
