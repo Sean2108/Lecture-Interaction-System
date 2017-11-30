@@ -1,4 +1,3 @@
-import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.rmi.Naming;
@@ -24,41 +23,29 @@ import org.apache.log4j.Level;
 public class VoterClient {
 	public static void main(String[] args) {
 		String[] poll;
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String ans ="", id = "";
 		Logger.getRootLogger().setLevel(Level.WARN);
         staticFiles.location("/UIResources");
-		
 		try {
 			VoterService e = (VoterService) Naming.lookup(VoterService.SERVICENAME);
 			poll = e.getPoll();
 			setRoutes(poll, e);
-			for (int i = 0; i < poll.length; i++) {
-				System.out.println(poll[i]);
-			}
-			System.out.println("Enter answer:  ");
-			
-			try {
-			   ans = br.readLine();
-		       } catch(IOException ioe) {
-			        System.err.println(ioe.getMessage());
-		    }
-			System.out.println("Enter Student ID");
-			try {
-				id = br.readLine();
-		    } catch(IOException ioe) {
-		    	System.err.println(ioe.getMessage());
-		    }
-			
-            System.out.println(e.vote(id, ans));			
+			System.out.println("Visit localhost:4567/mcqAns to answer multiple choice questions, " + 
+			"or localhost:4567:openAns to answer open ended questions.");
 		}catch(Exception e) {
 			System.err.println("Remote Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
-		
-		
 	}
 	
+	/**
+	 * allows pages to be displayed on client browser. /mcqAns is used for answering multiple choice questions,
+	 * and /openAns is used for answering open ended questions. Jsoup library is used to parse the html and
+	 * replace the placeholder text with the question and options provided by the professor.
+	 * VoterService's vote method will be called at the end to tally the vote and provide feedback.
+	 * @param poll 0th index contains the question, the rest of the indices contain mcq options or open ended keywords
+	 * @param vi java RMI class that will be either have different implementations depending on the type of question.
+	 * vi's vote method will add the vote to a hash map if the student has not voted yet.
+	 */
 	private static void setRoutes(String[] poll, VoterService vi) {
     	get("/mcqAns", (request, response) -> {
             response.type("text/html");
