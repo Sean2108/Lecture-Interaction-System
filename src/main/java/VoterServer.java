@@ -1,13 +1,11 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.rmi.*;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.*;
 import static spark.Spark.*;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
-
-import org.apache.log4j.BasicConfigurator;
 
 /**
  * starts the server for the system
@@ -18,10 +16,9 @@ public class VoterServer {
 	public static void main(String[] args) {
 		if (System.getSecurityManager() == null) System.setSecurityManager(new RMISecurityManager());
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        //BasicConfigurator.configure();
         Logger.getRootLogger().setLevel(Level.WARN);
         staticFiles.location("/UIResources");
-        init();
+        setRoutes();
 		try {
 			System.out.println("Enter 1 for MCQ, 2 for Open ended question.");
 			boolean isMCQ = br.readLine().equals("1") ? true : false;
@@ -99,4 +96,28 @@ public class VoterServer {
 		}
 		return null;
 	}
+
+    private static void setRoutes() {
+    	get("/mcq", (request, response) -> {
+            response.type("text/html");
+            return new String(Files.readAllBytes(Paths.get("src/main/resources/UIResources/QuestionSetupMC.html")));
+        });
+    	
+    	post("/mcq", (req, res) -> {
+            StringBuilder message = new StringBuilder();
+
+            try {
+                String question = req.queryParams("question");
+                String[] a = req.queryParamsValues("a");
+                message.append(question + "<br>");
+                for (int i = 0; i < a.length; i++) {
+                	message.append((char)('a' + i) + ". " + a[i]);
+                	message.append("<br>");
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+            return message.toString();
+        });
+    }
 }
