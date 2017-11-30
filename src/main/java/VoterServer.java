@@ -103,29 +103,35 @@ public class VoterServer {
             return new String(Files.readAllBytes(Paths.get("src/main/resources/UIResources/QuestionSetupMC.html")));
         });
     	
+    	get("/mcq?", (request, response) -> {
+            response.redirect("/mcq");
+            return null;
+        });
+    	
     	post("/mcq", (req, res) -> {
-            StringBuilder message = new StringBuilder();
             List<String> poll = new ArrayList<>();
             try {
                 String question = req.queryParams("question");
                 String[] a = req.queryParamsValues("a");
-                message.append(question + "<br><br>");
                 poll.add(question);
                 for (int i = 0; i < a.length; i++) {
-                	message.append((char)('a' + i) + ". " + a[i]);
-                	message.append("<br>");
                 	poll.add(a[i]);
                 }
                 Naming.rebind(VoterService.SERVICENAME, new MCQVoterServiceImpl(poll));
             } catch(Exception e) {
                 e.printStackTrace();
             }
-            return message.toString();
+            return new String(Files.readAllBytes(Paths.get("src/main/resources/UIResources/ProfConfirmation.html")));
         });
     	
     	get("/open", (request, response) -> {
             response.type("text/html");
             return new String(Files.readAllBytes(Paths.get("src/main/resources/UIResources/QuestionSetupSA.html")));
+        });
+    	
+    	get("/open?", (request, response) -> {
+            response.redirect("/open");
+            return null;
         });
     	
     	post("/open", (req, res) -> {
@@ -142,7 +148,7 @@ public class VoterServer {
             } catch(Exception e) {
                 e.printStackTrace();
             }
-            return question;
+            return new String(Files.readAllBytes(Paths.get("src/main/resources/UIResources/ProfConfirmation.html")));
         });
     }
 }

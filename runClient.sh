@@ -19,4 +19,5 @@
 
 set -o nounset                              # Treat unset variables as an error
 
-java -cp target/classes VoterClient
+java -cp target/lis-0.0.1-SNAPSHOT.jar VoterClient
+#java -cp target/classes VoterClient
