@@ -106,10 +106,7 @@ public class ServerRouter {
     private void setConfirmRoutes() {
     	get("/confirm", (request, response) -> {
             response.type("text/html");
-            String html = new String(Files.readAllBytes(Paths.get("src/main/resources/ServerUI/ProfConfirmation.html")));
-            Document doc = Jsoup.parse(html);
-            doc.selectFirst("span#ipAdd").text(getIP());
-            return doc.toString();
+            return new String(Files.readAllBytes(Paths.get("src/main/resources/ServerUI/ProfConfirmation.html")));  
         });
     	
     	post("/confirm", (request, response) -> {
@@ -171,14 +168,4 @@ public class ServerRouter {
         return query.toString();
     }
     
-    /**
-     * pings AWS in order to retrieve server's IP address
-     * @return Server's public IP
-     * @throws IOException Unable to read AWS's response
-     */
-	private String getIP() throws IOException {
-		URL url = new URL("http://checkip.amazonaws.com/");
-		BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-		return br.readLine();
-	}
 }
