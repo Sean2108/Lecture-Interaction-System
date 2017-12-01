@@ -14,6 +14,7 @@ public class VoterServer {
 		if (System.getSecurityManager() == null) System.setSecurityManager(new RMISecurityManager());
         Logger.getRootLogger().setLevel(Level.WARN);
         staticFiles.location("/UIResources");
+        // host name of server
 		System.setProperty("java.rmi.server.hostname", "10.160.16.84");
         ServerRouter s = new ServerRouter();
         s.setFrontPage();

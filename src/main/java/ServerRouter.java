@@ -142,10 +142,15 @@ public class ServerRouter {
             response.redirect(redirectUrl.toString());
             return null;
         });
-    	
+        
     	get("/chart/values", (request, response) -> {
             response.type("text/html");
             return new String(Files.readAllBytes(Paths.get("src/main/resources/ServerUI/" + type + "Chart.html")));
+        });
+
+    	get("/chart/" + type + "Chart.js", (request, response) -> {
+            response.type("text/js");
+            return new String(Files.readAllBytes(Paths.get("src/main/resources/ServerUI/" + type + "Chart.js")));
         });
     }
     
