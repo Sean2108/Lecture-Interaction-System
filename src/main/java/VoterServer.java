@@ -15,11 +15,12 @@ public class VoterServer {
 		if (System.getSecurityManager() == null) System.setSecurityManager(new RMISecurityManager());
         Logger.getRootLogger().setLevel(Level.WARN);
         staticFiles.location("/UIResources");
-        //String hostname = "10.160.18.54"; // private ip address of host
         String hostname;
-		try {
+        try {
 			hostname = InetAddress.getLocalHost().getHostAddress();
-			System.setProperty("java.rmi.server.hostname", hostname);
+            // private ip address of host, uncomment and change to your ip if connection error occurs. Linux host address method behaves inconsistently.
+			// hostname = "10.160.18.54";
+            System.setProperty("java.rmi.server.hostname", hostname);
 	        ServerRouter s = new ServerRouter();
 	        s.setFrontPage();
 	        System.out.println("Visit localhost:4567 to start.");

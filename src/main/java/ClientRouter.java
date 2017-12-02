@@ -6,7 +6,6 @@ import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.Naming;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -101,7 +100,7 @@ public class ClientRouter {
 		post("/", (req, res) -> {
             String ipAdd = req.queryParams("ipAdd");
             try {
-	            Registry registry = LocateRegistry.getRegistry(ipAdd, 2001);
+	            Registry registry = LocateRegistry.getRegistry(ipAdd, 1099);
 	            VoterService vi = (VoterService) registry.lookup(VoterService.SERVICENAME);
 	            String nextPage = "";
 	            if (vi.isMCQ()) nextPage = setMCQRoutes(vi);
