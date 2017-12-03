@@ -22,16 +22,16 @@ public class OpenEndedVoterServiceImpl extends UnicastRemoteObject implements Vo
 	 * 
 	 */
 	private static final long serialVersionUID = -8524186864175925764L;
-	public final static String SERVICENAME="VoteService";
-	private Map<String, Integer> hitCount = new HashMap<String, Integer>();
-	private Map<String, Integer> missCount = new HashMap<String, Integer>();
-	private ArrayList<String> voteOnce = new ArrayList<String>();
-	private Set<String> keywords = new HashSet<>();
+	public final static String SERVICENAME = "VoteService";
+	private Map<String, Integer> hitCount;
+	private Map<String, Integer> missCount;
+	private Set<String> voteOnce;
+	private Set<String> keywords;
 	private String question;
-	private SentenceDetectorME sentenceDetector = null;
-	private Tokenizer tokenizer = null;
-	private POSTaggerME tagger = null;
-	private DictionaryLemmatizer lemmatizer = null;
+	private SentenceDetectorME sentenceDetector;
+	private Tokenizer tokenizer;
+	private POSTaggerME tagger;
+	private DictionaryLemmatizer lemmatizer;
 	
 	/**
 	 * empty constructor, initializes models and feeds them training data
@@ -39,6 +39,10 @@ public class OpenEndedVoterServiceImpl extends UnicastRemoteObject implements Vo
 	 */
 	public OpenEndedVoterServiceImpl() throws RemoteException {
 		super();	// sets up networking
+		hitCount = new HashMap<>();
+		missCount = new HashMap<>();
+		voteOnce = new HashSet<>();
+		keywords = new HashSet<>();
 		initModels();
 	}
 	
@@ -80,7 +84,10 @@ public class OpenEndedVoterServiceImpl extends UnicastRemoteObject implements Vo
 	 */
 	public synchronized String vote(String studentId, String vote) throws java.rmi.RemoteException {
 		if (voteOnce.contains(studentId)) return "You already answered!";
-		if (!keywords.isEmpty()) return "You are " + Math.round(parse(vote) * 100 / (double) keywords.size()) + "% right!";
+		if (!keywords.isEmpty()) {
+			voteOnce.add(studentId);
+			return "You are " + Math.round(parse(vote) * 100 / (double) keywords.size()) + "% right!";
+		}
 		else return "No valid keywords available";
 	}
 			

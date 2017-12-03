@@ -11,10 +11,10 @@ public class MCQVoterServiceImpl extends UnicastRemoteObject implements VoterSer
 	 * 
 	 */
 	private static final long serialVersionUID = 8064717333958683642L;
-	public final static String SERVICENAME="VoteService";
-	Map<String, Integer> numberOfVotes = new HashMap<String, Integer>();
-	List<String> voteOnce = new ArrayList<String>();
-	List<String> poll;
+	public final static String SERVICENAME = "VoteService";
+	private Map<String, Integer> numberOfVotes;
+	private Set<String> voteOnce;
+	private List<String> poll;
 	
 	/**
 	 * zero parameter constructor
@@ -22,6 +22,8 @@ public class MCQVoterServiceImpl extends UnicastRemoteObject implements VoterSer
 	 */
 	public MCQVoterServiceImpl() throws RemoteException {
 		super();	// sets up networking
+		numberOfVotes = new HashMap<>();
+		voteOnce = new HashSet<>();
 	}
 	
 	/**
@@ -30,7 +32,7 @@ public class MCQVoterServiceImpl extends UnicastRemoteObject implements VoterSer
 	 * @throws RemoteException VoterService class cannot be found
 	 */
 	public MCQVoterServiceImpl(List<String> poll) throws RemoteException {
-		super();	// sets up networking
+		this();	// sets up networking
 		this.poll = poll;
 	}
 	

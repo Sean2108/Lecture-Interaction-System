@@ -1,10 +1,6 @@
 import static spark.Spark.get;
 import static spark.Spark.post;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.rmi.Naming;
@@ -12,9 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 public class ServerRouter {
 	/**
@@ -159,7 +152,7 @@ public class ServerRouter {
      * @param count map containing key value pairs of word -> count of occurrence
      * @return string to append as query string to end of redirectUrl
      */
-    private String addTopTenToURL(Map<String, Integer> count) {
+    String addTopTenToURL(Map<String, Integer> count) {
     	PriorityQueue<Map.Entry<String, Integer>> topEntries = new PriorityQueue<>((x, y) -> y.getValue() - x.getValue());
     	for (Map.Entry<String, Integer> voteEntry : count.entrySet()) {
         	topEntries.add(voteEntry);
