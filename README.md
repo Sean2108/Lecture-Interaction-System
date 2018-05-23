@@ -1,11 +1,23 @@
 # Lecture-Interaction-System
 System that analyzes students' responses to lecturers' questions to look for common misconceptions, and allows students to ask questions to the lecturers.
 
-build jar using: mvn package OR mvn clean install (must have maven installed)
+build jar using: 
+```shell
+mvn package
+```
+OR 
+```shell
+mvn clean install (must have maven installed)
+```
+run server using: 
+```shell
+sh runServer.sh
+```
 
-run server using: sh runServer.sh
-
-run client using: sh runClient.sh
+run client using: 
+```shell
+sh runClient.sh
+```
 
 server page is on port 4567, client page is on port 4568.
 
